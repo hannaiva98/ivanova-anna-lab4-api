@@ -22,7 +22,7 @@ async function deleteUser(uuid, token) {
   });
 }
 
-describe('Тестирование API DemoQA', () => {
+describe('DemoQA API Testing', () => {
   const userInfo = {
     userName: `user_${Date.now()}`,
     password: 'Str0ngP@ssword'
@@ -31,46 +31,46 @@ describe('Тестирование API DemoQA', () => {
   let token = '';
   let userId = '';
 
-  test('Создание пользователя — позитивный кейс', async () => {
+  test('Create user — positive case', async () => {
     const res = await createUser(userInfo);
     expect(res.status).toBe(201);
     userId = res.data.userID;
   });
 
-  test('Создание пользователя — негативный кейс (пустой пароль)', async () => {
+  test('Create user — negative case (empty password)', async () => {
     await expect(createUser({ userName: 'abc', password: '' })).rejects.toThrow();
   });
 
-  test('Генерация токена — позитивный кейс', async () => {
+  test('Generate token — positive case', async () => {
     const res = await generateToken(userInfo);
     expect(res.status).toBe(200);
     expect(res.data.token).toBeDefined();
     token = res.data.token;
   });
 
-test('Генерация токена — негативный кейс (неправильный пароль)', async () => {
-  const wrongData = { userName: userInfo.userName, password: 'wrong123' };
-  const res = await generateToken(wrongData);
-  expect(res.status).toBe(200);
-  expect(res.data.token).toBeNull();
-});
+  test('Generate token — negative case (incorrect password)', async () => {
+    const wrongData = { userName: userInfo.userName, password: 'wrong123' };
+    const res = await generateToken(wrongData);
+    expect(res.status).toBe(200);
+    expect(res.data.token).toBeNull();
+  });
 
-  test('Получение данных пользователя — позитивный кейс', async () => {
+  test('Get user data — positive case', async () => {
     const res = await getUser(userId, token);
     expect(res.status).toBe(200);
     expect(res.data.userId).toBe(userId);
   });
 
-  test('Получение данных пользователя — негативный кейс (неверный UUID)', async () => {
+  test('Get user data — negative case (invalid UUID)', async () => {
     await expect(getUser('00000000-0000-0000-0000-000000000000', 'badtoken')).rejects.toThrow();
   });
 
-  test('Удаление пользователя — позитивный кейс', async () => {
+  test('Delete user — positive case', async () => {
     const res = await deleteUser(userId, token);
     expect(res.status).toBe(204);
   });
 
-  test('Удаление пользователя — негативный кейс (несуществующий ID)', async () => {
+  test('Delete user — negative case (non-existent ID)', async () => {
     const res = await deleteUser('00000000-0000-0000-0000-000000000000', token);
     expect(res.status).toBe(200);
     expect(res.data).toHaveProperty('code', '1207');

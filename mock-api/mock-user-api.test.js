@@ -33,12 +33,12 @@ const mockUser = {
   }
 };
 
-describe('Проверка моков API /users/:id', () => {
+describe('API mock test for /users/:id', () => {
   beforeEach(() => {
     nock.cleanAll();
   });
 
-  test('Успешный ответ: структура пользователя', async () => {
+  test('Successful response: user structure validation', async () => {
     nock(API).get('/users/1').reply(200, mockUser);
 
     const res = await axios.get(`${API}/users/1`);
@@ -56,7 +56,7 @@ describe('Проверка моков API /users/:id', () => {
   ];
 
   test.each(errorCases)(
-    'Ошибка %i: проверка структуры сообщения',
+    'Error %i: response structure validation',
     async (status, body) => {
       nock(API).get('/users/999').reply(status, body);
 
